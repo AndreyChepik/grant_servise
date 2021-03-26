@@ -46,25 +46,59 @@ class Appartment(Property):
     @staticmethod
     def prompt_init():
         parent_init = Property.prompt_init()
-        laundry = ''
-        while laundry.lower() not in Appartment.valid_laundries:
-            laundry = input('What laundry facilities does property have? ({})'
-                            .format(", ".join(Appartment.valid_laundries)))
-        balcony = ''
-        while balcony.lower() not in Appartment.valid_balconies:
-            balcony = input(
-                'Does property have a balcony? ({})'
-                    .format(', '.join(Appartment.valid_balconies)))
+        laundry = get_valid_input('What loundry facilities does property have?', Appartment.valid_laundries)
+        balcony = get_valid_input('Does the property have a balcony?', Appartment.valid_balconies)
         parent_init.update({
-            'laundry': laundry,
-            'balcony': balcony
+            'laundry' : laundry,
+            'balcony' : balcony
         })
         return parent_init
-    # prompt_init = staticmethod(prompt_init)
 
-ap = Appartment('bal', 'laund', footage = 12, bedrooms=3, bathrooms = 4)
-sm = Appartment('bal', 'laund', footage = 12, bedrooms=3, bathrooms = 4)
-# print(ap.prompt_init())
-# print(Appartment.prompt_init())
-print(ap)
-print(sm)
+
+class House(Property):
+    valid_garage = ("attached", "detached", "none")
+    valid_fenced = ("yes", "no")
+
+    def __init__(self, floors='', garage='', fenced='', **kwargs):
+        super().__init__(kwargs)
+        self.floors = floors
+        self.garage = garage
+        self.fenced = fenced
+
+    def display(self):
+        """
+        Method that displays information about chosen house`s facilities
+        """
+        super().display()
+        print('=======HOUSE DETAILS=========')
+        print(f'house have {self.floors}')
+        print(f'garage is: {self.garage}')
+        print(f'is fenced: {self.fenced}')
+
+
+    @staticmethod
+    def prompt_init():
+        parent_init = Property.prompt_init()
+        garage = get_valid_input('What the garage should be?', House.valid_garage)
+        fenced = get_valid_input('Should the house be fanced?', House.valid_fenced)
+        floors = int(input('How many floors should be?'))
+        parent_init.update({
+            'floors' : floors,
+            'garage' : garage,
+            'fenced' : fenced
+        })
+        return parent_init
+
+
+
+def get_valid_input(input_string, valid_words: tuple):
+    """returns value it matches one of valid_words """
+    input_string += f'{valid_words}'
+    response = input(input_string)
+    while response.lower() not in ' '.join(valid_words):
+        response = input(input_string)
+    return response
+
+h = Appartment()
+h.prompt_init()
+h.display()
