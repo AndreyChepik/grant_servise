@@ -60,7 +60,7 @@ class House(Property):
     valid_fenced = ("yes", "no")
 
     def __init__(self, floors='', garage='', fenced='', **kwargs):
-        super().__init__(kwargs)
+        super().__init__(**kwargs)
         self.floors = floors
         self.garage = garage
         self.fenced = fenced
@@ -99,6 +99,48 @@ def get_valid_input(input_string, valid_words: tuple):
         response = input(input_string)
     return response
 
-h = Appartment()
-h.prompt_init()
-h.display()
+
+class Purchase:
+    def __init__(self, price='', taxes='', **kwargs):
+        super().__init__(**kwargs)
+        self.price = price
+        self.taxes = taxes
+
+    def display(self):
+        super().display()
+        print('========Purchase details========')
+        print(f'Selling price {self.price}')
+        print(f'Estimated taxes {self.taxes}')
+
+    @staticmethod
+    def prompt_init():
+        return dict(
+            price = input('what price should be'),
+            taxes = input('what are estimated taxes')
+        )
+
+class Rental:
+    def __init__(self, furnished='', utilities='', rent='', **kwargs):
+        super().__init__(**kwargs)
+        self.furnished = furnished
+        self.utilities = utilities
+        self.rent = rent
+
+    def display(self):
+        super().display()
+        print('=======Rental details=======')
+        print(f'Is furnished {self.furnished}')
+        print(f'rent: {self.rent}')
+        print(f'Utilities: {self.utilities}')
+
+    @staticmethod
+    def prompt_init():
+        return dict(
+            rent = input('Input rent:'),
+            utilities = input('Input utilities:'),
+            furnished = get_valid_input(('Should be furnished? (yes, no)', ('yes', 'no')))
+        )
+
+
+r = Rental()
+r.display()
